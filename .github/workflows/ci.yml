@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend — migrate + test
+    runs-on: ubuntu-latest
+
+    # A real Postgres service container, not SQLite — this is what
+    # actually validates the Alembic migration works against the same
+    # database engine production uses. Tests themselves still run against
+    # fast in-memory SQLite (see tests/conftest.py) since test speed and
+    # migration-correctness are different concerns being verified here.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: triageiq
+          POSTGRES_PASSWORD: triageiq
+          POSTGRES_DB: triageiq
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U triageiq"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          # bcrypt is pinned separately — see requirements.txt comment on the
+          # passlib/bcrypt 4.1+ incompatibility discovered during Module 3.
+          pip install "bcrypt==4.0.1"
+
+      - name: Run Alembic migration against real Postgres
+        env:
+          SECRET_KEY: ci-test-secret-not-for-production
+          DATABASE_URL: postgresql://triageiq:triageiq@localhost:5432/triageiq
+        run: alembic upgrade head
+
+      - name: Run pytest with coverage
+        env:
+          SECRET_KEY: ci-test-secret-not-for-production
+          APP_ENV: test
+        run: pytest tests/ --cov=app --cov-report=term-missing --cov-fail-under=80
+
+  frontend:
+    name: Frontend — build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check and build
+        run: npm run build
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=critical
+        # high-severity findings are reviewed manually rather than blocking
+        # CI outright (see README — the react-router-dom RSC advisory does
+        # not apply to this client-only SPA); critical findings still fail
+        # the build.

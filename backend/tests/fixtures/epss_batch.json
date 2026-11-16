@@ -1,0 +1,14 @@
+{
+  "status": "OK",
+  "status-code": 200,
+  "version": "1.0",
+  "access": "public",
+  "total": 3,
+  "offset": 0,
+  "limit": 100,
+  "data": [
+    { "cve": "CVE-2024-3400", "epss": "0.943820000", "percentile": "0.999340000", "date": "2026-07-14" },
+    { "cve": "CVE-2019-0708", "epss": "0.972450000", "percentile": "0.999870000", "date": "2026-07-14" },
+    { "cve": "CVE-2018-15473", "epss": "0.031200000", "percentile": "0.891200000", "date": "2026-07-14" }
+  ]
+}

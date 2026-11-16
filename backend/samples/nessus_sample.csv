@@ -1,0 +1,7 @@
+Plugin ID,CVE,CVSS v3.0 Base Score,Risk,Host,Protocol,Port,Name,Synopsis,Description,Solution
+142960,CVE-2024-3400,10.0,Critical,prod-api-01,tcp,443,PAN-OS GlobalProtect Command Injection,A critical command injection vulnerability exists,The remote host is affected by a command injection vulnerability in GlobalProtect.,Apply vendor patch immediately.
+51192,CVE-2019-0708,9.8,Critical,prod-rdp-02,tcp,3389,MS17-010: BlueKeep RDP RCE,Remote Desktop Services Remote Code Execution,A remote code execution vulnerability exists in Remote Desktop Services.,Apply MS17-010 patch.
+117216,CVE-2018-15473,5.3,Medium,prod-ssh-03,tcp,22,OpenSSH Username Enumeration,OpenSSH is affected by a user enumeration vulnerability,The SSH service allows enumeration of valid usernames via crafted packets.,Upgrade OpenSSH to the latest version.
+104631,,0.0,None,prod-api-01,tcp,80,HTTP Server Type and Version,Informational finding,The remote web server is running an identifiable HTTP server type and version.,No action required.
+90317,CVE-2016-2183,5.9,Medium,staging-db-01,tcp,3306,SWEET32 SSL/TLS Weak Cipher,SSL/TLS uses a 64-bit block cipher,The remote host supports the use of SSL/TLS ciphers that offer medium strength encryption.,Disable 3DES/Blowfish cipher suites.
+70658,,0.0,Low,prod-api-01,tcp,443,SSL Certificate Expiry,SSL certificate is nearing expiry,The SSL certificate for this service will expire soon.,Renew the SSL certificate before expiry.

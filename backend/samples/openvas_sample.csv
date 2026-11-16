@@ -1,0 +1,5 @@
+NVT Name,Hostname,IP,Port,Port Protocol,Severity,CVEs,Summary,NVT OID
+Apache Log4Shell RCE,prod-app-04,10.0.2.44,8080,tcp,Critical,"CVE-2021-44228, CVE-2021-45046",The remote host is running a version of Apache Log4j affected by a critical RCE vulnerability.,1.3.6.1.4.1.25623.1.0.144439
+Weak SSH Ciphers,prod-app-04,10.0.2.44,22,tcp,Medium,,The remote SSH server supports weak/deprecated cipher suites.,1.3.6.1.4.1.25623.1.0.105611
+OpenSSL Heartbleed,legacy-vpn-05,10.0.3.10,443,tcp,High,CVE-2014-0160,The remote host is affected by the Heartbleed memory disclosure vulnerability in OpenSSL.,1.3.6.1.4.1.25623.1.0.103958
+TCP Timestamps Enabled,prod-app-04,10.0.2.44,0,tcp,Log,,TCP timestamps are enabled, which can be used to estimate uptime.,1.3.6.1.4.1.25623.1.0.80091
